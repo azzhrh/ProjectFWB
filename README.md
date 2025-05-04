@@ -7,87 +7,108 @@
 <a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
 </p>
 
-Judul	: Plantopia : Katalog Tanaman Hias Digital
-Nama	: Az Zahra
-Nim	: D0223005
-Framework Web Based
-2024
-Katalog Tanaman Hias Digital adalah sebuah aplikasi berbasis web yang memungkinkan pengguna untuk mengelola dan menelusuri koleksi tanaman hias secara digital. Aplikasi ini memiliki tiga jenis role pengguna, yaitu:
-•	Admin: Bertugas mengelola pengguna, kategori, serta keseluruhan data tanaman dan transaksi.
-•	Petugas: Bertugas memperbarui stok tanaman dan mengelola informasi tanaman.
-•	User: Dapat melihat katalog, melakukan pembelian tanaman, serta melihat riwayat transaksi mereka.
-1.	Fitur Utama
-•	Autentikasi Pengguna: Pengguna dapat mendaftar, login, dan mengelola profil mereka.
-•	Manajemen Tanaman: Petugas dan admin dapat menambah, mengedit, dan menghapus data tanaman.
-•	Katalog Tanaman: User dapat melihat daftar tanaman berdasarkan kategori atau nama.
-•	Transaksi Pembelian: User dapat membeli tanaman, sistem akan mencatat transaksi dan mengurangi stok tanaman.
-•	Role Management: Akses pengguna dibatasi sesuai perannya.
-•	Manajemen Kategori: Admin dapat menambahkan dan mengelola kategori tanaman.
-•	Riwayat Aktivitas: Sistem mencatat aktivitas penting seperti login dan pembelian.
-1.	Tabel users (Pengguna)
-| **Field**    | **Tipe Data**       | **Deskripsi**                  |
-| ------------ | ------------------- | ------------------------------ |
-| `id`         | INT AUTO\_INCREMENT | ID unik untuk setiap pengguna  |
-| `name`       | VARCHAR(255)        | Nama pengguna                  |
-| `email`      | VARCHAR(255) UNIQUE | Alamat email pengguna          |
-| `password`   | VARCHAR(255)        | Password pengguna (di-hash)    |
-| `role_id`    | INT                 | Relasi ke tabel `roles`        |
-| `created_at` | TIMESTAMP           | Waktu saat pengguna dibuat     |
-| `updated_at` | TIMESTAMP           | Waktu saat pengguna diperbarui |
+# Plantopia : Katalog Tanaman Hias Digital
 
-2.	Tabel Roles (Peran Pengguna)
-| **Field**    | **Tipe Data**                    | **Deskripsi**                         |
-| ------------ | -------------------------------- | ------------------------------------- |
-| `id`         | INT                              | ID unik role                          |
-| `name`       | ENUM('admin', 'petugas', 'user') | Nama peran pengguna                   |
-| `created_at` | TIMESTAMP                        | Waktu saat role dibuat (otomatis)     |
-| `updated_at` | TIMESTAMP                        | Waktu saat role diperbarui (otomatis) |
+**Nama:** Az Zahra  
+**NIM:** D0223005  
+**Mata Kuliah:** Framework Web Based  
+**Tahun:** 2024
 
+---
 
-3.	Tabel Plants (Tanaman)
-| **Field**     | **Tipe Data** | **Deskripsi**                             |
-| ------------- | ------------- | ----------------------------------------- |
-| `id`          | INT           | ID unik tanaman                           |
-| `name`        | VARCHAR(255)  | Nama tanaman                              |
-| `description` | TEXT          | Deskripsi tanaman dan harga               |
-| `price`       | INT           | Harga tanaman                             |
-| `stock`       | INT           | Stok tanaman yang tersedia                |
-| `category_id` | INT           | Relasi ke tabel `categories`              |
-| `image`       | VARCHAR(255)  | Path atau URL gambar tanaman              |
-| `created_at`  | TIMESTAMP     | Waktu saat tanaman ditambahkan (otomatis) |
-| `updated_at`  | TIMESTAMP     | Waktu saat data tanaman diperbarui        |
+## Deskripsi
 
+**Plantopia** adalah aplikasi berbasis web untuk mengelola dan menelusuri koleksi tanaman hias secara digital. Aplikasi ini memiliki tiga jenis role pengguna:
 
-4.	Tabel Categories (Kategori Tanaman)
-| **Field**     | **Tipe Data** | **Deskripsi**              |
-| ------------- | ------------- | -------------------------- |
-| `id`          | INT           | ID unik kategori           |
-| `name`        | VARCHAR(100)  | Nama kategori tanaman      |
-| `description` | TEXT          | Deskripsi kategori tanaman |
+- **Admin:** Mengelola pengguna, kategori, data tanaman, dan transaksi.
+- **Petugas:** Mengelola dan memperbarui data tanaman serta stok.
+- **User:** Melihat katalog, membeli tanaman, dan melihat riwayat transaksi.
 
+---
 
-5.	Tabel Transaction (Transaksi Pembelian)
-| **Field**     | **Tipe Data** | **Deskripsi**                               |
-| ------------- | ------------- | ------------------------------------------- |
-| `id`          | INT           | ID unik transaksi                           |
-| `user_id`     | INT           | ID pengguna yang melakukan pembelian        |
-| `plant_id`    | INT           | ID tanaman yang dibeli                      |
-| `quantity`    | INT           | Jumlah tanaman yang dibeli                  |
-| `total_price` | INT           | Total harga (hasil dari `price * quantity`) |
-| `created_at`  | TIMESTAMP     | Waktu saat transaksi dibuat                 |
-| `updated_at`  | TIMESTAMP     | Waktu saat transaksi diperbarui             |
+## Fitur Utama
 
+- **Autentikasi Pengguna:** Registrasi, login, dan pengelolaan profil.
+- **Manajemen Tanaman:** Tambah, edit, dan hapus tanaman (admin/petugas).
+- **Katalog Tanaman:** Pencarian tanaman berdasarkan kategori atau nama.
+- **Transaksi Pembelian:** Pembelian tanaman oleh user dengan pencatatan transaksi dan pengurangan stok.
+- **Role Management:** Hak akses sesuai peran.
+- **Manajemen Kategori:** Admin dapat mengatur kategori tanaman.
+- **Riwayat Aktivitas:** Pencatatan aktivitas seperti login dan pembelian.
 
-2. Relasi Antar Tabel
-| **Relasi**                | **Jenis Relasi** | **Penjelasan**                                       |
-| ------------------------- | ---------------- | ---------------------------------------------------- |
-| `users` → `roles`         | Many-to-One      | Banyak pengguna memiliki satu role.                  |
-| `plants` → `categories`   | Many-to-One      | Banyak tanaman dapat tergolong dalam satu kategori.  |
-| `transactions` → `users`  | Many-to-One      | Banyak transaksi bisa dilakukan oleh satu user.      |
-| `transactions` → `plants` | Many-to-One      | Banyak transaksi bisa melibatkan satu jenis tanaman. |
-| `favorites` → `users`     | Many-to-One      | Banyak favorit dimiliki oleh satu user.              |
-| `favorites` → `plants`    | Many-to-One      | Banyak favorit mengarah pada satu tanaman.           |
-| `logs` → `users`          | Many-to-One      | Banyak aktivitas dicatat untuk satu user.            |
+---
+
+## Struktur Tabel Database
+
+### 1. Tabel `users` (Pengguna)
+
+| Field       | Tipe Data        | Deskripsi                         |
+|-------------|------------------|-----------------------------------|
+| id          | INT AUTO_INCREMENT | ID unik untuk setiap pengguna     |
+| name        | VARCHAR(255)     | Nama pengguna                     |
+| email       | VARCHAR(255) UNIQUE | Email pengguna                  |
+| password    | VARCHAR(255)     | Password di-hash                  |
+| role_id     | INT              | Relasi ke tabel roles             |
+| created_at  | TIMESTAMP        | Waktu dibuat                      |
+| updated_at  | TIMESTAMP        | Waktu diperbarui                  |
+
+### 2. Tabel `roles` (Peran Pengguna)
+
+| Field       | Tipe Data | Deskripsi                        |
+|-------------|-----------|----------------------------------|
+| id          | INT       | ID unik role                     |
+| name        | ENUM      | admin, petugas, user             |
+| created_at  | TIMESTAMP | Otomatis                         |
+| updated_at  | TIMESTAMP | Otomatis                         |
+
+### 3. Tabel `plants` (Tanaman)
+
+| Field        | Tipe Data      | Deskripsi                         |
+|--------------|----------------|-----------------------------------|
+| id           | INT            | ID unik tanaman                   |
+| name         | VARCHAR(255)   | Nama tanaman                      |
+| description  | TEXT           | Deskripsi tanaman                 |
+| price        | INT            | Harga tanaman                     |
+| stock        | INT            | Jumlah stok                       |
+| category_id  | INT            | Relasi ke tabel categories        |
+| image        | VARCHAR(255)   | Path gambar tanaman               |
+| created_at   | TIMESTAMP      | Otomatis                          |
+| updated_at   | TIMESTAMP      | Otomatis                          |
+
+### 4. Tabel `categories` (Kategori Tanaman)
+
+| Field        | Tipe Data     | Deskripsi                         |
+|--------------|---------------|-----------------------------------|
+| id           | INT           | ID unik kategori                  |
+| name         | VARCHAR(100)  | Nama kategori                     |
+| description  | TEXT          | Deskripsi kategori                |
+
+### 5. Tabel `transactions` (Transaksi Pembelian)
+
+| Field        | Tipe Data | Deskripsi                                   |
+|--------------|-----------|---------------------------------------------|
+| id           | INT       | ID unik transaksi                           |
+| user_id      | INT       | ID user                                     |
+| plant_id     | INT       | ID tanaman                                  |
+| quantity     | INT       | Jumlah tanaman                              |
+| total_price  | INT       | Total harga (price * quantity)              |
+| created_at   | TIMESTAMP | Waktu transaksi                             |
+| updated_at   | TIMESTAMP | Waktu transaksi diperbarui                  |
+
+---
+
+## Relasi Antar Tabel
+
+| Relasi                    | Jenis Relasi  |
+|---------------------------|---------------|
+| Users - Roles            | Many-to-One   |
+| Plants - Categories      | Many-to-One   |
+| Transactions - Users     | Many-to-One   |
+| Transactions - Plants    | Many-to-One   |
+| Favorites - Users        | Many-to-One   |
+| Favorites - Plants       | Many-to-One   |
+| Logs - Users             | Many-to-One   |
+
 
 
 
