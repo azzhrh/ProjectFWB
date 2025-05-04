@@ -14,11 +14,15 @@ return new class extends Migration
         Schema::create('plants', function (Blueprint $table) {
             $table->id();
             $table->string('name');
+            $table->string('scientific_name')->nullable(); // Optional
             $table->text('description');
-            $table->string('image')->nullable();
+            $table->string('image_path')->nullable(); // Lebih deskriptif
             $table->foreignId('category_id')->constrained()->onDelete('cascade');
             $table->integer('stock')->default(0);
+            $table->decimal('price', 10, 2)->nullable(); // Optional
+            $table->boolean('is_available')->default(true); // Status tersedia
             $table->timestamps();
+            $table->softDeletes(); // Jika ingin fitur hapus sementara
         });
         
     }

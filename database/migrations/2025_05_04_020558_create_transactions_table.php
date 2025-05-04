@@ -16,9 +16,10 @@ return new class extends Migration
             $table->foreignId('user_id')->constrained()->onDelete('cascade');
             $table->foreignId('plant_id')->constrained()->onDelete('cascade');
             $table->integer('quantity');
-            $table->timestamp('transaction_date')->useCurrent();
+            $table->decimal('total_price', 10, 2);
             $table->timestamps();
         });
+        
         
     }
 

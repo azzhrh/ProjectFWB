@@ -7,31 +7,77 @@
 <a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
 </p>
 
-## About Laravel
+Judul	: Plantopia : Katalog Tanaman Hias Digital
+Nama	: Az Zahra
+Nim	: D0223005
+Framework Web Based
+2024
+Katalog Tanaman Hias Digital adalah sebuah aplikasi berbasis web yang memungkinkan pengguna untuk mengelola dan menelusuri koleksi tanaman hias secara digital. Aplikasi ini memiliki tiga jenis role pengguna, yaitu:
+•	Admin: Bertugas mengelola pengguna, kategori, serta keseluruhan data tanaman dan transaksi.
+•	Petugas: Bertugas memperbarui stok tanaman dan mengelola informasi tanaman.
+•	User: Dapat melihat katalog, melakukan pembelian tanaman, serta melihat riwayat transaksi mereka.
+1.	Fitur Utama
+•	Autentikasi Pengguna: Pengguna dapat mendaftar, login, dan mengelola profil mereka.
+•	Manajemen Tanaman: Petugas dan admin dapat menambah, mengedit, dan menghapus data tanaman.
+•	Katalog Tanaman: User dapat melihat daftar tanaman berdasarkan kategori atau nama.
+•	Transaksi Pembelian: User dapat membeli tanaman, sistem akan mencatat transaksi dan mengurangi stok tanaman.
+•	Role Management: Akses pengguna dibatasi sesuai perannya.
+•	Manajemen Kategori: Admin dapat menambahkan dan mengelola kategori tanaman.
+•	Riwayat Aktivitas: Sistem mencatat aktivitas penting seperti login dan pembelian.
+1.	Tabel users (Pengguna)
+Field	Tipe Data	Deskripsi
+Id	INT AUTO_INCREMENT	ID unik untuk setiap pengguna
+Name	VARCHAR(255)	Nama Pengguna
+Email	VARCHAR(255) UNIQUE	Alamat email pengguna
+Password	VARCHAR(255)	Password pengguna (di-hash)
+Role_id	INT	Relasi ke tabel roles
+Created_at	TIMESTAMP	Waktu saat pengguna dibuat
+Updated_at	TIMETAMP	Waktu saat pengguna diperbarui
+2.	Tabel Roles (Peran Pengguna)
+Field 	Tipe Data	Deskripsi
+Id	INT	ID unik role
+Name	ENUM	Nama peran : “admin”, “petugas”, “user”
+Created_at	TIMESTAMP	Otomatis
+Updated_at	TIMESTAMP	otomatis
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+3.	Tabel Plants (Tanaman)
+Field 	Tipe Data	Deskripsi
+Id	INT	ID unik tanaman
+Name	VARCHAR(255)	Nama tanaman
+Description	TEXT	Deskripsi tanaman harga tanaman
+Price	INT	Harga tanaman
+stock	INT	Stok tanaman tersedia
+Category_id	INT	Relasi ke tabel categories
+Image	VARCHAR(255)	Path gambar tanaman
+Created_at	TIMESTAMP	Otomatis
+Update_at	TIMESTAMP	Otomatis 
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+4.	Tabel Categories (Kategori Tanaman)
+Field 	Tipe Data	Deskripsi 
+Id	INT	ID unik kategori
+Name	VARCHAR(100)	Nama kategori tanaman
+Description	TEXT	Deskripsi kategori
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+5.	Tabel Transaction (Transaksi Pembelian)
+Field 	Tipe Data	Deskripsi 
+Id	INT	ID unik transaksi
+User_id	INT	ID pengguna yang melakukan pembelian
+Plant_id	INT	ID tanaman yang beli
+Quantity	INT	Jumlah tanaman yang beli
+Total_price	INT	Toal harga (price * quantity)
+Created_at	TIMESTAMP	Waktu saat transaksi
+Update_at	TIMESTAMP	Waktu saat transaksi diperbarui
 
-## Learning Laravel
+2. Relasi Antar Tabel
+Relasi 	Jenis relasi
+Users - roles	Many-to-One
+Plants - categories	Many-to-One
+Transactions - users	Many-to- One
+Transactions - plants	Many-to-One
+Favorites - users	Many-to-One
+Favorites - plants	Many-to-One
+Logs - users	Many-to-One
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
-
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
-
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
-
-## Laravel Sponsors
-
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
 
 ### Premium Partners
 
