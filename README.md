@@ -25,58 +25,70 @@ Katalog Tanaman Hias Digital adalah sebuah aplikasi berbasis web yang memungkink
 •	Manajemen Kategori: Admin dapat menambahkan dan mengelola kategori tanaman.
 •	Riwayat Aktivitas: Sistem mencatat aktivitas penting seperti login dan pembelian.
 1.	Tabel users (Pengguna)
-Field	Tipe Data	Deskripsi
-Id	INT AUTO_INCREMENT	ID unik untuk setiap pengguna
-Name	VARCHAR(255)	Nama Pengguna
-Email	VARCHAR(255) UNIQUE	Alamat email pengguna
-Password	VARCHAR(255)	Password pengguna (di-hash)
-Role_id	INT	Relasi ke tabel roles
-Created_at	TIMESTAMP	Waktu saat pengguna dibuat
-Updated_at	TIMETAMP	Waktu saat pengguna diperbarui
+| **Field**    | **Tipe Data**       | **Deskripsi**                  |
+| ------------ | ------------------- | ------------------------------ |
+| `id`         | INT AUTO\_INCREMENT | ID unik untuk setiap pengguna  |
+| `name`       | VARCHAR(255)        | Nama pengguna                  |
+| `email`      | VARCHAR(255) UNIQUE | Alamat email pengguna          |
+| `password`   | VARCHAR(255)        | Password pengguna (di-hash)    |
+| `role_id`    | INT                 | Relasi ke tabel `roles`        |
+| `created_at` | TIMESTAMP           | Waktu saat pengguna dibuat     |
+| `updated_at` | TIMESTAMP           | Waktu saat pengguna diperbarui |
+
 2.	Tabel Roles (Peran Pengguna)
-Field 	Tipe Data	Deskripsi
-Id	INT	ID unik role
-Name	ENUM	Nama peran : “admin”, “petugas”, “user”
-Created_at	TIMESTAMP	Otomatis
-Updated_at	TIMESTAMP	otomatis
+| **Field**    | **Tipe Data**                    | **Deskripsi**                         |
+| ------------ | -------------------------------- | ------------------------------------- |
+| `id`         | INT                              | ID unik role                          |
+| `name`       | ENUM('admin', 'petugas', 'user') | Nama peran pengguna                   |
+| `created_at` | TIMESTAMP                        | Waktu saat role dibuat (otomatis)     |
+| `updated_at` | TIMESTAMP                        | Waktu saat role diperbarui (otomatis) |
+
 
 3.	Tabel Plants (Tanaman)
-Field 	Tipe Data	Deskripsi
-Id	INT	ID unik tanaman
-Name	VARCHAR(255)	Nama tanaman
-Description	TEXT	Deskripsi tanaman harga tanaman
-Price	INT	Harga tanaman
-stock	INT	Stok tanaman tersedia
-Category_id	INT	Relasi ke tabel categories
-Image	VARCHAR(255)	Path gambar tanaman
-Created_at	TIMESTAMP	Otomatis
-Update_at	TIMESTAMP	Otomatis 
+| **Field**     | **Tipe Data** | **Deskripsi**                             |
+| ------------- | ------------- | ----------------------------------------- |
+| `id`          | INT           | ID unik tanaman                           |
+| `name`        | VARCHAR(255)  | Nama tanaman                              |
+| `description` | TEXT          | Deskripsi tanaman dan harga               |
+| `price`       | INT           | Harga tanaman                             |
+| `stock`       | INT           | Stok tanaman yang tersedia                |
+| `category_id` | INT           | Relasi ke tabel `categories`              |
+| `image`       | VARCHAR(255)  | Path atau URL gambar tanaman              |
+| `created_at`  | TIMESTAMP     | Waktu saat tanaman ditambahkan (otomatis) |
+| `updated_at`  | TIMESTAMP     | Waktu saat data tanaman diperbarui        |
+
 
 4.	Tabel Categories (Kategori Tanaman)
-Field 	Tipe Data	Deskripsi 
-Id	INT	ID unik kategori
-Name	VARCHAR(100)	Nama kategori tanaman
-Description	TEXT	Deskripsi kategori
+| **Field**     | **Tipe Data** | **Deskripsi**              |
+| ------------- | ------------- | -------------------------- |
+| `id`          | INT           | ID unik kategori           |
+| `name`        | VARCHAR(100)  | Nama kategori tanaman      |
+| `description` | TEXT          | Deskripsi kategori tanaman |
+
 
 5.	Tabel Transaction (Transaksi Pembelian)
-Field 	Tipe Data	Deskripsi 
-Id	INT	ID unik transaksi
-User_id	INT	ID pengguna yang melakukan pembelian
-Plant_id	INT	ID tanaman yang beli
-Quantity	INT	Jumlah tanaman yang beli
-Total_price	INT	Toal harga (price * quantity)
-Created_at	TIMESTAMP	Waktu saat transaksi
-Update_at	TIMESTAMP	Waktu saat transaksi diperbarui
+| **Field**     | **Tipe Data** | **Deskripsi**                               |
+| ------------- | ------------- | ------------------------------------------- |
+| `id`          | INT           | ID unik transaksi                           |
+| `user_id`     | INT           | ID pengguna yang melakukan pembelian        |
+| `plant_id`    | INT           | ID tanaman yang dibeli                      |
+| `quantity`    | INT           | Jumlah tanaman yang dibeli                  |
+| `total_price` | INT           | Total harga (hasil dari `price * quantity`) |
+| `created_at`  | TIMESTAMP     | Waktu saat transaksi dibuat                 |
+| `updated_at`  | TIMESTAMP     | Waktu saat transaksi diperbarui             |
+
 
 2. Relasi Antar Tabel
-Relasi 	Jenis relasi
-Users - roles	Many-to-One
-Plants - categories	Many-to-One
-Transactions - users	Many-to- One
-Transactions - plants	Many-to-One
-Favorites - users	Many-to-One
-Favorites - plants	Many-to-One
-Logs - users	Many-to-One
+| **Relasi**                | **Jenis Relasi** | **Penjelasan**                                       |
+| ------------------------- | ---------------- | ---------------------------------------------------- |
+| `users` → `roles`         | Many-to-One      | Banyak pengguna memiliki satu role.                  |
+| `plants` → `categories`   | Many-to-One      | Banyak tanaman dapat tergolong dalam satu kategori.  |
+| `transactions` → `users`  | Many-to-One      | Banyak transaksi bisa dilakukan oleh satu user.      |
+| `transactions` → `plants` | Many-to-One      | Banyak transaksi bisa melibatkan satu jenis tanaman. |
+| `favorites` → `users`     | Many-to-One      | Banyak favorit dimiliki oleh satu user.              |
+| `favorites` → `plants`    | Many-to-One      | Banyak favorit mengarah pada satu tanaman.           |
+| `logs` → `users`          | Many-to-One      | Banyak aktivitas dicatat untuk satu user.            |
+
 
 
 ### Premium Partners
