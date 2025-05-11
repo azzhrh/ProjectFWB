@@ -40,101 +40,75 @@
 
 ## Struktur Tabel Database
 
-### 1. Tabel `users` (Pengguna)
+### Tabel: `roles`
 
-| Field       | Tipe Data        | Deskripsi                         |
-|-------------|------------------|-----------------------------------|
-| id          | INT AUTO_INCREMENT | ID unik untuk setiap pengguna     |
-| name        | VARCHAR(255)     | Nama pengguna                     |
-| email       | VARCHAR(255) UNIQUE | Email pengguna                  |
-| password    | VARCHAR(255)     | Password di-hash                  |
-| role_id     | INT              | Relasi ke tabel roles             |
-| created_at  | TIMESTAMP        | Waktu dibuat                      |
-| updated_at  | TIMESTAMP        | Waktu diperbarui                  |
+| Kolom      | Tipe Data         | Keterangan             |
+|------------|-------------------|------------------------|
+| id         | BIGINT (Auto Inc) | Primary key            |
+| name       | ENUM              | ['admin', 'petugas', 'user'] |
+| created_at | TIMESTAMP         | Otomatis oleh Laravel  |
+| updated_at | TIMESTAMP         | Otomatis oleh Laravel  |
 
-### 2. Tabel `roles` (Peran Pengguna)
+### Tabel: `users`
 
-| Field       | Tipe Data | Deskripsi                        |
-|-------------|-----------|----------------------------------|
-| id          | INT       | ID unik role                     |
-| name        | ENUM      | admin, petugas, user             |
-| created_at  | TIMESTAMP | Otomatis                         |
-| updated_at  | TIMESTAMP | Otomatis                         |
+| Kolom      | Tipe Data         | Keterangan                         |
+|------------|-------------------|-------------------------------------|
+| id         | BIGINT (Auto Inc) | Primary key                         |
+| name       | STRING            | Nama pengguna                       |
+| email      | STRING (unique)   | Email unik                          |
+| password   | STRING            | Password (hash)                     |
+| role_id    | BIGINT            | FK → `roles.id`                     |
+| created_at | TIMESTAMP         | Otomatis oleh Laravel               |
+| updated_at | TIMESTAMP         | Otomatis oleh Laravel               |
 
-### 3. Tabel `plants` (Tanaman)
+### Tabel: `categories`
 
-| Field        | Tipe Data      | Deskripsi                         |
-|--------------|----------------|-----------------------------------|
-| id           | INT            | ID unik tanaman                   |
-| name         | VARCHAR(255)   | Nama tanaman                      |
-| description  | TEXT           | Deskripsi tanaman                 |
-| price        | INT            | Harga tanaman                     |
-| stock        | INT            | Jumlah stok                       |
-| category_id  | INT            | Relasi ke tabel categories        |
-| image        | VARCHAR(255)   | Path gambar tanaman               |
-| created_at   | TIMESTAMP      | Otomatis                          |
-| updated_at   | TIMESTAMP      | Otomatis                          |
+| Kolom      | Tipe Data         | Keterangan                  |
+|------------|-------------------|------------------------------|
+| id         | BIGINT (Auto Inc) | Primary key                 |
+| name       | STRING(100)       | Nama kategori               |
+| description| TEXT (nullable)   | Deskripsi kategori          |
+| created_at | TIMESTAMP         | Otomatis oleh Laravel       |
+| updated_at | TIMESTAMP         | Otomatis oleh Laravel       |
 
-### 4. Tabel `categories` (Kategori Tanaman)
+### Tabel: `plants`
 
-| Field        | Tipe Data     | Deskripsi                         |
-|--------------|---------------|-----------------------------------|
-| id           | INT           | ID unik kategori                  |
-| name         | VARCHAR(100)  | Nama kategori                     |
-| description  | TEXT          | Deskripsi kategori                |
+| Kolom       | Tipe Data         | Keterangan                       |
+|-------------|-------------------|-----------------------------------|
+| id          | BIGINT (Auto Inc) | Primary key                      |
+| name        | STRING            | Nama tanaman                     |
+| description | TEXT (nullable)   | Deskripsi tanaman                |
+| price       | INTEGER           | Harga tanaman                    |
+| stock       | INTEGER           | Stok tersedia                    |
+| category_id | BIGINT            | FK → `categories.id`             |
+| image       | STRING (nullable) | Path gambar tanaman              |
+| created_at  | TIMESTAMP         | Otomatis oleh Laravel            |
+| updated_at  | TIMESTAMP         | Otomatis oleh Laravel            |
 
-### 5. Tabel `transactions` (Transaksi Pembelian)
+### Tabel: `transactions`
 
-| Field        | Tipe Data | Deskripsi                                   |
-|--------------|-----------|---------------------------------------------|
-| id           | INT       | ID unik transaksi                           |
-| user_id      | INT       | ID user                                     |
-| plant_id     | INT       | ID tanaman                                  |
-| quantity     | INT       | Jumlah tanaman                              |
-| total_price  | INT       | Total harga (price * quantity)              |
-| created_at   | TIMESTAMP | Waktu transaksi                             |
-| updated_at   | TIMESTAMP | Waktu transaksi diperbarui                  |
+| Kolom       | Tipe Data         | Keterangan                      |
+|-------------|-------------------|----------------------------------|
+| id          | BIGINT (Auto Inc) | Primary key                     |
+| user_id     | BIGINT            | FK → `users.id`                 |
+| plant_id    | BIGINT            | FK → `plants.id`                |
+| quantity    | INTEGER           | Jumlah yang dibeli              |
+| total_price | INTEGER           | Total harga                     |
+| created_at  | TIMESTAMP         | Otomatis oleh Laravel           |
+| updated_at  | TIMESTAMP         | Otomatis oleh Laravel           |
 
 ---
 
-## Relasi Antar Tabel
+### Relasi Antar Tabel
 
-| Relasi                    | Jenis Relasi  |
-|---------------------------|---------------|
-| Users - Roles            | Many-to-One   |
-| Plants - Categories      | Many-to-One   |
-| Transactions - Users     | Many-to-One   |
-| Transactions - Plants    | Many-to-One   |
-| Favorites - Users        | Many-to-One   |
-| Favorites - Plants       | Many-to-One   |
-| Logs - Users             | Many-to-One   |
+| Relasi                        | Tabel 1        | Tabel 2        | Jenis Relasi   | Penjelasan                                                                 |
+|-------------------------------|----------------|----------------|----------------|-----------------------------------------------------------------------------|
+| **Roles ↔ Users**             | `roles`        | `users`        | One-to-Many    | Setiap pengguna (`users`) hanya memiliki satu `role`, namun satu `role` dapat dimiliki oleh banyak pengguna (`users`). |
+| **Categories ↔ Plants**       | `categories`   | `plants`       | One-to-Many    | Setiap tanaman (`plants`) masuk dalam satu kategori (`categories`), tetapi satu kategori dapat memiliki banyak tanaman (`plants`). |
+| **Users ↔ Transactions**      | `users`        | `transactions` | One-to-Many    | Setiap transaksi (`transactions`) milik satu pengguna (`users`), namun satu pengguna dapat memiliki banyak transaksi (`transactions`). |
+| **Plants ↔ Transactions**     | `plants`       | `transactions` | One-to-Many    | Setiap transaksi pembelian (`transactions`) berhubungan dengan satu tanaman (`plants`), tetapi satu tanaman dapat dibeli dalam banyak transaksi. |
+| **Users ↔ Sessions** (Opsional) | `users`        | `sessions`     | One-to-Many    | Setiap sesi login (`sessions`) dapat dikaitkan dengan satu pengguna (`users`), namun satu pengguna dapat memiliki banyak sesi (tergantung implementasi sistem login). |
 
 
 
 
-### Premium Partners
-
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel/)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Redberry](https://redberry.international/laravel-development/)**
-- **[Active Logic](https://activelogic.com)**
-
-## Contributing
-
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
-
-## Code of Conduct
-
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
-
-## Security Vulnerabilities
-
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
-
-## License
-
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
