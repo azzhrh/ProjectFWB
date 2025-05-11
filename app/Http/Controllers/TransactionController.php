@@ -2,32 +2,50 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
 use App\Models\Transaction;
+use App\Models\User;
 use App\Models\Plant;
+use Illuminate\Http\Request;
 
 class TransactionController extends Controller
 {
+    public function index()
+    {
+        $transactions = Transaction::with(['user', 'plant'])->get();
+        return view('transactions.index', compact('transactions'));
+    }
+
+    public function create()
+    {
+        $users = User::all();
+        $plants = Plant::all();
+        return view('transactions.create', compact('users', 'plants'));
+    }
+
     public function store(Request $request)
     {
-        DB::transaction(function () use ($request) {
-            $transaction = new Transaction();
-            $transaction->user_id = auth()->id();
-            $transaction->plant_id = $request->plant_id;
-            $transaction->quantity = $request->quantity;
-            $transaction->save();
+        $request->validate([
+            'user_id' => 'required|exists:users,id',
+            'plant_id' => 'required|exists:plants,id',
+            'quantity' => 'required|integer|min:1',
+        ]);
 
-            $plant = Plant::find($request->plant_id);
-            $plant->stock -= $request->quantity;
+        $plant = Plant::findOrFail($request->plant_id);
+        $total = $plant->price * $request->quantity;
 
-            if ($plant->stock < 0) {
-                throw new \Exception("Stok tidak cukup.");
-            }
+        Transaction::create([
+            'user_id' => $request->user_id,
+            'plant_id' => $request->plant_id,
+            'quantity' => $request->quantity,
+            'total_price' => $total,
+        ]);
 
-            $plant->save();
-        });
+        return redirect()->route('transactions.index')->with('success', 'Transaction created.');
+    }
 
-        return redirect()->back()->with('success', 'Transaksi berhasil.');
+    public function destroy(Transaction $transaction)
+    {
+        $transaction->delete();
+        return redirect()->route('transactions.index')->with('success', 'Transaction deleted.');
     }
 }
