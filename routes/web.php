@@ -91,6 +91,7 @@ Route::middleware(['auth', RoleMiddleware::class . ':admin'])
         Route::resource('/categories', AdminCategoryController::class);
         Route::resource('/plants', AdminPlantController::class);
         Route::get('/transactions', [AdminTransactionController::class, 'index'])->name('transactions');
+        Route::resource('/users', \App\Http\Controllers\Admin\UserController::class);
     });
 
 // ====================
@@ -105,7 +106,9 @@ Route::middleware(['auth', RoleMiddleware::class . ':customer'])
         Route::post('/catalog/buy/{plant}', [CustomerCatalogController::class, 'buy'])->name('catalog.buy');
         Route::get('/transactions', [CustomerTransactionController::class, 'index'])->name('transactions');
 
-        // ✅ FIXED DI SINI: route yang benar dan tidak tumpang tindih
+        // ✅ TAMBAHAN FIX: route yang kamu butuhkan
+        Route::get('/catalog/categories', [CategoryController::class, 'index'])->name('catalog.categories');
+
         Route::get('/categories', [CategoryController::class, 'index'])->name('categories.index');
         Route::get('/categories/{category}', [CategoryController::class, 'show'])->name('categories.show');
     });
@@ -118,6 +121,7 @@ Route::middleware(['auth', RoleMiddleware::class . ':petugas'])
     ->name('petugas.')
     ->group(function () {
         Route::get('/dashboard', [PetugasDashboardController::class, 'index'])->name('dashboard');
+        Route::resource('plants', PetugasPlantController::class);
     });
 
 // ====================
@@ -126,21 +130,9 @@ Route::middleware(['auth', RoleMiddleware::class . ':petugas'])
 Route::resource('categories', AdminCategoryController::class)->middleware('auth');
 
 // ====================
-// JANGAN DIUBAH: Route testing manual (tetap dipertahankan sesuai permintaan)
+// JANGAN DIUBAH: Route testing manual
 // ====================
 Route::get('/plants', [AdminPlantController::class, 'index'])->name('plants.index');
-
-Route::middleware(['auth', 'role:petugas'])->prefix('petugas')->name('petugas.')->group(function () {
-    Route::resource('plants', PetugasPlantController::class);
-});
-
-Route::middleware(['auth', RoleMiddleware::class . ':admin'])
-    ->prefix('admin')
-    ->name('admin.')
-    ->group(function () {
-        Route::resource('/plants', AdminPlantController::class); // ← HARUS ADA INI
-        Route::resource('/users', \App\Http\Controllers\Admin\UserController::class);
-    });
 
 // ====================
 // (Optional) Kategori berdasarkan tanaman
