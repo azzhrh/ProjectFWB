@@ -15,5 +15,6 @@ public function transactions()
 {
     return $this->hasMany(Transaction::class);
 }
+    protected $fillable = ['name', 'description', 'price', 'category_id','stock', 'image'];
 
 }

@@ -2,21 +2,28 @@
 
 namespace App\Models;
 
-// use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 
 class User extends Authenticatable
 {
-  public function role()
+    use HasFactory, Notifiable;
+
+    protected $fillable = [
+        'name',
+        'email',
+        'password',
+        'role', // enum: admin, petugas, customer
+    ];
+
+    public function transactions()
+    {
+        return $this->hasMany(Transaction::class);
+    }
+    public function role()
 {
     return $this->belongsTo(Role::class);
-}
-
-public function transactions()
-{
-    return $this->hasMany(Transaction::class);
 }
 
 }
