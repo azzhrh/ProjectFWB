@@ -22,7 +22,7 @@
 
 - **Admin:** Mengelola pengguna, kategori, data tanaman, dan transaksi.
 - **Petugas:** Mengelola dan memperbarui data tanaman serta stok.
-- **User:** Melihat katalog, membeli tanaman, dan melihat riwayat transaksi.
+- **Customer:** Melihat katalog, membeli tanaman, dan melihat riwayat transaksi.
 
 ---
 
